@@ -15,6 +15,16 @@ class Window :
     name = "None"
     bgc = None
 
+    # For non-frame-rate tied calculations
+    delta = 0
+    # To calculate delta
+    previous = 0
+    now = pygame.time.get_ticks()
+
+    # Frame-rate
+    fps = 1 / 60
+    frame_time = 0
+
     # Clear the screen
     def cls(self) -> None:
         pygame.draw.rect(self.screen, (self.bgc.r, self.bgc.g, self.bgc.b), (0, 0, self.size.x, self.size.y))
@@ -25,8 +35,20 @@ class Window :
 
     # Update the window
     def update(self) -> None:
-        pygame.display.update()
+        if self.frame_time >= self.fps:
+            pygame.display.update()
+            self.frame_time -= self.fps
+            print("Frame")
+
         self.cls()
+
+        # Get delta
+        self.previous = self.now
+        self.now = pygame.time.get_ticks()
+        self.delta = (self.now - self.previous) / 1000.0
+
+        # Set framerate
+        self.frame_time += self.delta
 
         events = pygame.event.get()
         for event in events:
@@ -34,10 +56,14 @@ class Window :
                 pygame.quit()
                 sys.exit()
 
-    def __init__(self, size : vector.Vector2, bgc : color.Color3 = color.Color3(255, 0, 255), name : str = "Default", icon:image.Image = image.Image("mods/gfx/defaults/default.png")) -> None:
+    def __init__(self, size : vector.Vector2, bgc : color.Color3 = color.Color3(255, 0, 255), name : str = "Default", icon:image.Image = image.Image("mods/gfx/defaults/default.png"), framerate:int=60) -> None:
+        # Set attributes
         self.size = size
         self.bgc = bgc
         self.name = name
+
+        # Frame-rate
+        self.fps = 1 / framerate
 
         # Make the screen
         self.screen = pygame.display.set_mode((self.size.x, self.size.y))
