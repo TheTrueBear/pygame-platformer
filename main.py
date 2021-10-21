@@ -11,10 +11,11 @@ image = img.Image("test.png")
 image.transform_size(vec.Vector2(400, 400))
 
 y = 0
+x = 0
 
 while True:
     y += 100 * window.delta
-    window.render(vec.Vector2(100, 100 + y), img=image)
+    window.render(vec.Vector2(100 + x, 100 + y), img=image)
     if window.is_key_held(pygame.K_x):
-        print("X Pressed!")
+        x += 100 * window.delta
     window.update()
