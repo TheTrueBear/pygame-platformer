@@ -10,11 +10,11 @@ window = wind.Window(window_size, name="Game", framerate=30)
 image = img.Image("test.png")
 image.transform_size(vec.Vector2(400, 400))
 
-x = 0
+y = 0
 
 while True:
-    x += 100 * window.delta
-    window.render(vec.Vector2(100, 100 + x), img=image)
+    y += 100 * window.delta
+    window.render(vec.Vector2(100, 100 + y), img=image)
     if window.is_key_held(pygame.K_x):
         print("X Pressed!")
     window.update()
