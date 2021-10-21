@@ -2,7 +2,7 @@ import pygame
 import sys
 
 # My modules
-import mods.vector as vector
+import m.vector as vector
 import mods.gfx.color as color
 import mods.gfx.image as image
 
@@ -34,7 +34,7 @@ class Window :
         pygame.draw.rect(self.screen, (self.bgc.r, self.bgc.g, self.bgc.b), (0, 0, self.size.x, self.size.y))
 
     # Render an image
-    def render(self,  pos:vector.Vector2, img:image.Image=image.Image("mods/gfx/defaults/default.png")) -> None:
+    def render(self, pos: vector.Vector2, img:image.Image=image.Image("m/gfx/defaults/default.png")) -> None:
         self.screen.blit(img.raw, (pos.x, pos.y))
 
     # Update the window
@@ -70,7 +70,7 @@ class Window :
         return self.keys[key]
 
 
-    def __init__(self, size : vector.Vector2, bgc : color.Color3 = color.Color3(255, 0, 255), name : str = "Default", icon:image.Image = image.Image("mods/gfx/defaults/default.png"), framerate:int=60) -> None:
+    def __init__(self, size : vector.Vector2, bgc : color.Color3 = color.Color3(255, 0, 255), name : str = "Default", icon:image.Image = image.Image("m/gfx/defaults/default.png"), framerate:int=60) -> None:
         # Set attributes
         self.size = size
         self.bgc = bgc
