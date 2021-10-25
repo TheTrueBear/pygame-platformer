@@ -1,14 +1,16 @@
 import pygame
+from mods.vector import Vector2
 
 class Entity:
     sprite = None
     collider = None
     hitbox = None
 
-    def __init__(self, sprite, collider, hitbox) -> None:
+    def __init__(self, sprite, collider, hitbox, position) -> None:
         self.sprite = sprite
         self.collider = collider
         self.hitbox = hitbox
+        self.position = position
 
 ####################
 # CONTROLS
@@ -31,24 +33,44 @@ class SideScrollControls(Controls):
     pass
 
 class BirdseyeControls(Controls):
-    def return_controls(self, window) -> bool:
+    def return_controls(self, window) -> (bool, bool, bool, bool):
         w = False
         a = False
         s = False
         d = False
 
+        if window.is_key_held(self.up):
+            w = True
+        if window.is_key_held(self.down):
+            s = True
+        if window.is_key_held(self.left):
+            a = True
+        if window.is_key_held(self.right):
+            d = True
 
-
-        return False, False, False, False
-
+        return w, a, s, d
 
 class Player(Entity):
-    def __init__(self, sprite, collider, hitbox, controls=BirdseyeControls(100, 100, pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_SPACE)) -> None:
+    def __init__(self, sprite, collider, hitbox, position, controls=BirdseyeControls(300, 100, pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_SPACE)) -> None:
         # Super the abstract Entity class
-        super().__init__(sprite, collider, hitbox=hitbox)
+        super().__init__(sprite, collider, hitbox, position)
 
         self.controls = controls
 
-    def move(self, window):
-        pass
+    def warp_to(self, position):
+        self.position = position
 
+    def move(self, window):
+        w, a, s, d = self.controls.return_controls(window)
+
+        # Up-down
+        if w:
+            self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)))
+        elif s:
+            self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)))
+
+        # Left-right
+        if a:
+            self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y))
+        elif d:
+            self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y))

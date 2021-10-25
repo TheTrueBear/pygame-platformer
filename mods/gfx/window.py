@@ -23,7 +23,9 @@ class Window :
 
     # Key
     k_events = []
-    keys = [False] * 250
+    keys = [False] * 400
+
+    current_fps = 0
 
     # Frame-rate
     fps = 1 / 60
@@ -34,7 +36,7 @@ class Window :
         pygame.draw.rect(self.screen, (self.bgc.r, self.bgc.g, self.bgc.b), (0, 0, self.size.x, self.size.y))
 
     # Render an image
-    def render(self, pos: vector.Vector2, img:image.Image=image.Image("mods/gfx/defaults/default.png")) -> None:
+    def render(self, pos: vector.Vector2, img) -> None:
         self.screen.blit(img.raw, (pos.x, pos.y))
 
     # Update the window
@@ -49,6 +51,7 @@ class Window :
         self.previous = self.now
         self.now = pygame.time.get_ticks()
         self.delta = (self.now - self.previous) / 1000.0
+        self.current_fps = 1 / self.delta
 
         # Set frame-rate
         self.frame_time += self.delta
