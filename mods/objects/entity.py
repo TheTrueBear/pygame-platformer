@@ -1,9 +1,11 @@
+import pygame
+
 class Entity:
     sprite = None
     collider = None
     hitbox = None
 
-    def __init__(self, sprite, collider, hitbox=collider) -> None:
+    def __init__(self, sprite, collider, hitbox) -> None:
         self.sprite = sprite
         self.collider = collider
         self.hitbox = hitbox
@@ -29,8 +31,24 @@ class SideScrollControls(Controls):
     pass
 
 class BirdseyeControls(Controls):
-    pass
+    def return_controls(self, window) -> bool:
+        w = False
+        a = False
+        s = False
+        d = False
+
+
+
+        return False, False, False, False
 
 
 class Player(Entity):
-    pass
+    def __init__(self, sprite, collider, hitbox, controls=BirdseyeControls(100, 100, pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_SPACE)) -> None:
+        # Super the abstract Entity class
+        super().__init__(sprite, collider, hitbox=hitbox)
+
+        self.controls = controls
+
+    def move(self, window):
+        pass
+
