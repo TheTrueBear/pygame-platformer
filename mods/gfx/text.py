@@ -1,6 +1,12 @@
+#################
+# IMPORTS
+#################
 import pygame
 from mods.gfx.color import Color3
 
+#############################################
+# A basic text-to-texture renderer. You can
+# set font, text, size, and color.
 class Text:
     text = ""
     font_name = ""

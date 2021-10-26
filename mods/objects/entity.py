@@ -1,11 +1,21 @@
+##################
+# IMPORTS
+##################
 import pygame
 from mods.vector import Vector2
 
+#############################################################
+# ENTITIES
+# Basic entity class. All different entites extend this.
+# AI is only implemented on EnemyEntity, AllyEntity, and
+# NeutralEntity.
 class Entity:
+    # Base values
     sprite = None
     collider = None
     hitbox = None
 
+    # Initiate the Entity class
     def __init__(self, sprite, collider, hitbox, position) -> None:
         self.sprite = sprite
         self.collider = collider
@@ -15,30 +25,33 @@ class Entity:
 ####################
 # CONTROLS
 ####################
+# The base controls class.
 class Controls:
     def __init__(self, speed:int, jump_power:int, up:int,down:int,left:int,right:int,jump:int):
+        # Set speed and jump power
         self.speed = speed
         self.jump_power = jump_power
 
+        # Set the movement keys
         self.up=up
         self.down=down
         self.left=left
         self.right=right
         self.jump=jump
 
-    def get_key_just_pressed(self, key:int):
-        pass
-
+# SideScrolling controls, use for platformers. Not implemented yet.
 class SideScrollControls(Controls):
     pass
 
 class BirdseyeControls(Controls):
     def return_controls(self, window):
+        # Get the actual controls
         w = False
         a = False
         s = False
         d = False
 
+        # Get all input
         if window.is_key_held(self.up):
             w = True
         if window.is_key_held(self.down):
