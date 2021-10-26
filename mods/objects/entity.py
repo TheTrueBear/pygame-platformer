@@ -33,7 +33,7 @@ class SideScrollControls(Controls):
     pass
 
 class BirdseyeControls(Controls):
-    def return_controls(self, window) -> (bool, bool, bool, bool):
+    def return_controls(self, window) -> bool:
         w = False
         a = False
         s = False

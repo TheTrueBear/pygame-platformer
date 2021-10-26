@@ -7,7 +7,7 @@ from mods.gfx.text import Text
 import pygame
 
 window_size = vec.Vector2(800, int((800 / 16) * 10))
-window = wind.Window(window_size, name="Game", framerate=1)
+window = wind.Window(window_size, name="Game", framerate=120)
 
 image = img.Image("test.png")
 image.transform_size(vec.Vector2(200, 200))
@@ -23,7 +23,7 @@ x = 0
 
 while True:
     plr.move(window)
-    text.modify(f'FPS:{window.delta}')
+    text.modify(f'FPS:{window.current_fps}')
 
     window.render(plr.position, plr.sprite)
     window.render(vec.Vector2(0,0), text)

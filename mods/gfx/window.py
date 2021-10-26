@@ -14,6 +14,7 @@ class Window :
     size = None
     name = "None"
     bgc = None
+    bgi = image.Image("background.png")
 
     # For non-frame-rate tied calculations
     delta = 0
@@ -25,7 +26,9 @@ class Window :
     k_events = []
     keys = [False] * 400
 
+    # Framerates
     current_fps = 0
+    delta_to_frame = 0.1
 
     # Frame-rate
     fps = 1 / 60
@@ -33,7 +36,8 @@ class Window :
 
     # Clear the screen
     def cls(self) -> None:
-        pygame.draw.rect(self.screen, (self.bgc.r, self.bgc.g, self.bgc.b), (0, 0, self.size.x, self.size.y))
+        self.render(vector.Vector2(0, 0), self.bgi)
+        # pygame.draw.rect(self.screen, (self.bgc.r, self.bgc.g, self.bgc.b), (0, 0, self.size.x, self.size.y))
 
     # Render an image
     def render(self, pos: vector.Vector2, img) -> None:
@@ -41,17 +45,21 @@ class Window :
 
     # Update the window
     def update(self) -> None:
+        # Frame update
         if self.frame_time >= self.fps:
+            self.current_fps = round(1 / self.delta_to_frame)
+            self.delta_to_frame = 0
             pygame.display.update()
             self.frame_time -= self.fps
 
+        # Clear screen
         self.cls()
 
         # Get delta
         self.previous = self.now
         self.now = pygame.time.get_ticks()
         self.delta = (self.now - self.previous) / 1000.0
-        self.current_fps = 1 / self.delta
+        self.delta_to_frame += self.delta
 
         # Set frame-rate
         self.frame_time += self.delta
@@ -60,7 +68,11 @@ class Window :
         for event in events:
             # Input
             if event.type == pygame.KEYDOWN:
-                self.keys[event.key] = True
+                try:
+                    if len(self.keys) > event.key >= 0:
+                        self.keys[event.key] = True
+                except():
+                    pass
             if event.type == pygame.KEYUP:
                 self.keys[event.key] = False
 
@@ -86,6 +98,9 @@ class Window :
         self.screen = pygame.display.set_mode((self.size.x, self.size.y))
         pygame.display.set_caption(self.name)
         pygame.display.set_icon(icon.raw)
+
+        #
+        self.bgi.transform_size(self.size)
 
         # Init
         pygame.init()
