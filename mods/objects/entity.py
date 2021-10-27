@@ -3,6 +3,7 @@
 ##################
 import pygame
 from mods.vector import Vector2
+import mods.objects.collider as collider
 
 #############################################################
 # ENTITIES
@@ -14,13 +15,16 @@ class Entity:
     sprite = None
     collider = None
     hitbox = None
+    position = None
 
     # Initiate the Entity class
-    def __init__(self, sprite, collider, hitbox, position) -> None:
+    def __init__(self, sprite, c, hitbox, position) -> None:
         self.sprite = sprite
-        self.collider = collider
+        self.collider = c
         self.hitbox = hitbox
         self.position = position
+
+        self.collider.move(position)
 
 ####################
 # CONTROLS
@@ -81,19 +85,34 @@ class Player(Entity):
     # Teleport the player
     def warp_to(self, position):
         self.position = position
+        self.collider.move(self.position)
+
+    def check_collision(self, colliders):
+        for i in range(len(colliders)):
+            if colliders[i].is_colliding(self.collider, self): print(True);return True
+        return False
 
     # Move the player. This is using the controls variable.
     def move(self, window):
         w, a, s, d = self.controls.return_controls(window)
 
+        colliders = collider.colliders
+
+        print(f'POS:{(self.position.x, self.position.y)}')
+
         # Up-down movement
         if w:
+            if self.check_collision(colliders): return
             self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)))
         elif s:
+            if self.check_collision(colliders): return
             self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)))
 
         # Left-right movement
         if a:
+            if self.check_collision(colliders): return
             self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y))
         elif d:
+            if self.check_collision(colliders): return
             self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y))
+            pass
