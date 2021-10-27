@@ -24,7 +24,9 @@ class Entity:
         self.hitbox = hitbox
         self.position = position
 
-        self.collider.move(position)
+        print(self.collider)
+
+        self.collider.warp(position)
 
 ####################
 # CONTROLS
@@ -85,7 +87,7 @@ class Player(Entity):
     # Teleport the player
     def warp_to(self, position):
         self.position = position
-        self.collider.move(self.position)
+        self.collider.warp(self.position)
 
     def check_collision(self, colliders):
         for i in range(len(colliders)):
@@ -97,8 +99,6 @@ class Player(Entity):
         w, a, s, d = self.controls.return_controls(window)
 
         colliders = collider.colliders
-
-        print(f'POS:{(self.position.x, self.position.y)}')
 
         # Up-down movement
         if w:

@@ -1,39 +1,48 @@
+from mods.vector import Vector2
+import pygame
+
 colliders = []
 
 class RectCollider:
-    top = 0
-    right = 0
-    bottom = 0
-    left = 0
-
+    # Data
     x_size = 0
     y_size = 0
 
-    def move(self, newPos):
-        self.top += newPos.y
-        self.bottom += newPos.y
-        self.left += newPos.x
-        self.right += newPos.x
+    rect = None
 
-    def warp(self, newPos):
-        pass
+    position = None
 
-    def is_colliding(self, coll, sender):
-        x_col = False
-        y_col = False
-        col = False
+    # Warp the collider
+    def warp(self, new_pos:Vector2):
+        to_warp = Vector2(new_pos.x - self.position.x, new_pos.y - self.position.y)
+        self.rect = self.rect.move(to_warp.x, to_warp.y)
 
-        print(f'TOP: {self.top}, THAT AREA: {coll.top},{coll.bottom}, BOTTOM: {self.bottom}')
+        """
+        Position of rect: 0, 0
+        Position we want to warp to: 100, 100
+        
+        If we do position - r_position, we get 100, 100! 
+        
+        
+        Position of rect: 50, 100
+        Position we want to warp to: 1100, 50
+        
+        If we do position - rposition, we get 1050, -50
+        That should work...
+        """
 
-        if self.left <= coll.left <= self.right   and   self.right <= coll.right <= self.left: x_col = True
-        if self.top <= coll.top <= self.bottom   and   self.bottom <= coll.bottom <= self.top: y_col = True
+    # Get collision
+    def is_colliding(self, collider, sender):
+        if self == sender.collider: return False
+        print(self.rect.x)
+        print(f'C:{collider.rect.x}')
+        return self.rect.colliderect(collider.rect)
 
-        return x_col and y_col
+    # Initiate the collider
+    def __init__(self, x_size:int, y_size:int, start_pos:Vector2=Vector2(0,0)):
+        self.x_size = x_size
+        self.y_size = y_size
+        self.position = start_pos
 
-    def __init__(self, top, bottom, left, right):
-        self.top = top
-        self.bottom = bottom
-        self.left = left
-        self.right = right
-
+        self.rect = pygame.Rect(start_pos.x, start_pos.y, x_size, y_size)
         colliders.append(self)

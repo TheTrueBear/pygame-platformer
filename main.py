@@ -13,15 +13,10 @@ window = wind.Window(window_size, name="Game", framerate=30)
 image = img.Image("test.png")
 #image.transform_size(vec.Vector2(200, 200))
 
-plr = Player(image, RectCollider(0, 50, 0, 50), None, vec.Vector2(0, 0))
-entity = Entity(image, RectCollider(0, 50, 0, 50), None, vec.Vector2(100, 100))
+plr = Player(image, RectCollider(50, 50), None, vec.Vector2(0, 0))
+entity = Entity(image, RectCollider(50, 50), None, vec.Vector2(100, 100))
 
-print("BEFORE")
-#text = Text("Menlo", 30, "FPS:0", color=Color3(255, 255, 255))
-print("AFTER")
-#text2 = Text("Arial", 30,  "TEST", color=Color3(0, 0, 0))
-
-print(pygame.KMOD_SHIFT)
+print(False and True)
 
 y = 0
 x = 0
