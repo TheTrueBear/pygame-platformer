@@ -8,15 +8,17 @@ from mods.gfx.text import Text
 import pygame
 
 window_size = vec.Vector2(800, int((800 / 16) * 10))
-window = wind.Window(window_size, name="Game", framerate=30)
+window = wind.Window(window_size, name="Game", framerate=60)
 
 image = img.Image("test.png")
 #image.transform_size(vec.Vector2(200, 200))
 
-plr = Player(image, RectCollider(50, 50), None, vec.Vector2(0, 0))
-entity = Entity(image, RectCollider(50, 50), None, vec.Vector2(100, 100))
+plr = Player(image, RectCollider(30, 30), None, vec.Vector2(0, 0))
+entity = Entity(image, RectCollider(30, 30), None, vec.Vector2(100, 100))
 
 print(False and True)
+
+print(pygame.K_DOWN)
 
 y = 0
 x = 0

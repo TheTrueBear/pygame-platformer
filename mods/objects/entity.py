@@ -24,8 +24,6 @@ class Entity:
         self.hitbox = hitbox
         self.position = position
 
-        print(self.collider)
-
         self.collider.warp(position)
 
 ####################
@@ -89,9 +87,16 @@ class Player(Entity):
         self.position = position
         self.collider.warp(self.position)
 
-    def check_collision(self, colliders):
+    def check_collision(self, colliders, direc:int, window):
         for i in range(len(colliders)):
-            if colliders[i].is_colliding(self.collider, self): print(True);return True
+            if direc == 0:
+                if colliders[i].is_colliding(self.collider.ghost_move(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta))), self): return True
+            if direc == 1:
+                if colliders[i].is_colliding(self.collider.ghost_move(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta))), self): return True
+            if direc == 2:
+                if colliders[i].is_colliding(self.collider.ghost_move(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y)), self): return True
+            if direc == 3:
+                if colliders[i].is_colliding(self.collider.ghost_move(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y)), self): return True
         return False
 
     # Move the player. This is using the controls variable.
@@ -102,17 +107,17 @@ class Player(Entity):
 
         # Up-down movement
         if w:
-            if self.check_collision(colliders): return
+            if self.check_collision(colliders, 0, window): return
             self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)))
         elif s:
-            if self.check_collision(colliders): return
+            if self.check_collision(colliders, 1, window): return
             self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)))
 
         # Left-right movement
         if a:
-            if self.check_collision(colliders): return
+            if self.check_collision(colliders, 2, window): return
             self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y))
         elif d:
-            if self.check_collision(colliders): return
+            if self.check_collision(colliders, 3, window): return
             self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y))
             pass

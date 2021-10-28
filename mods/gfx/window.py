@@ -68,11 +68,11 @@ class Window :
         for event in events:
             # Input
             if event.type == pygame.KEYDOWN:
-                try:
-                    if len(self.keys) > event.key >= 0:
-                        self.keys[event.key] = True
-                except():
-                    pass
+                if event.key < len(self.keys):
+                    print(event.key)
+                    self.keys[event.key] = True
+                else:
+                    print("\033[31mException: Index not defined\033[0m")
             if event.type == pygame.KEYUP:
                 self.keys[event.key] = False
 

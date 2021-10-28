@@ -14,8 +14,14 @@ class RectCollider:
 
     # Warp the collider
     def warp(self, new_pos:Vector2):
-        to_warp = Vector2(new_pos.x - self.position.x, new_pos.y - self.position.y)
-        self.rect = self.rect.move(to_warp.x, to_warp.y)
+        # Tried this before
+        #to_warp = Vector2(new_pos.x - self.position.x, new_pos.y - self.position.y)
+        #self.rect = self.rect.move(to_warp.x, to_warp.y)
+
+        self.position = new_pos
+        self.rect.x = new_pos.x
+        self.rect.y = new_pos.y
+        #self.rect.move_ip(self.position.x - new_pos.x, self.position.y - new_pos.y)
 
         """
         Position of rect: 0, 0
@@ -31,11 +37,22 @@ class RectCollider:
         That should work...
         """
 
+    # Return a special collider
+    def ghost_move(self, newPos):
+        ghost = self
+        ghost.rect.x = newPos.x
+        ghost.rect.y = newPos.y
+
+        return ghost
+
     # Get collision
     def is_colliding(self, collider, sender):
         if self == sender.collider: return False
-        print(self.rect.x)
-        print(f'C:{collider.rect.x}')
+
+        if self.rect.colliderect(collider.rect):
+            print("TOP: %s\nBOTTOM: %s\nLEFT: %s\nRIGHT:%s" % (self.rect.top, self.rect.bottom, self.rect.left, self.rect.right))
+            print("TOP2: %s\nBOTTOM2: %s\nLEFT2: %s\nRIGHT2:%s" % (collider.rect.top, collider.rect.bottom, collider.rect.left, collider.rect.right))
+
         return self.rect.colliderect(collider.rect)
 
     # Initiate the collider
