@@ -34,6 +34,9 @@ class Window :
     fps = 1 / 60
     frame_time = 0
 
+    # Offset
+    offset = vector.Vector2(0,0)
+
     # Clear the screen
     def cls(self) -> None:
         self.render(vector.Vector2(0, 0), self.bgi)
@@ -41,7 +44,7 @@ class Window :
 
     # Render an image
     def render(self, pos: vector.Vector2, img) -> None:
-        self.screen.blit(img.raw, (pos.x, pos.y))
+        self.screen.blit(img.raw, (pos.x + self.offset.x, pos.y + self.offset.y))
 
     # Update the window
     def update(self) -> None:
@@ -84,6 +87,8 @@ class Window :
     def is_key_held(self, key:int) -> bool:
         return self.keys[key]
 
+    def change_offset(self, offset):
+        self.offset = offset
 
     def __init__(self, size : vector.Vector2, bgc : color.Color3 = color.Color3(255, 0, 255), name : str = "Default", icon:image.Image = image.Image("mods/gfx/defaults/default.png"), framerate:int=60) -> None:
         # Set attributes

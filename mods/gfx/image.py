@@ -33,3 +33,6 @@ class Image :
     def __init__(self, path:str) -> None:
         self.path = path
         self.raw = pygame.image.load(self.path)
+
+    def __repr__(self):
+        return self.raw

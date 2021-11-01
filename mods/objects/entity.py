@@ -75,15 +75,21 @@ class BirdseyeControls(Controls):
 #
 class Player(Entity):
     # Initiate the player, setting all the data variables such as controls.
-    def __init__(self, sprite, collider, hitbox, position, controls=BirdseyeControls(300, 100, pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_SPACE)) -> None:
+    def __init__(self, sprite, collide, hitbox, position, controls=BirdseyeControls(300, 100, pygame.K_w, pygame.K_s, pygame.K_a,
+                                                           pygame.K_d, pygame.K_SPACE), c_lock:bool=False) -> None:
         # Super the abstract Entity class
-        super().__init__(sprite, collider, hitbox, position)
+        super().__init__(sprite, collide, hitbox, position)
 
         # Set the controls
         self.controls = controls
+        self.c_lock = c_lock
 
     # Teleport the player
-    def warp_to(self, position):
+    def warp_to(self, position, window=None):
+        if window is not None and self.c_lock == True:
+            window.change_offset(position)
+            return
+
         self.position = position
         self.collider.warp(self.position)
 
@@ -108,16 +114,16 @@ class Player(Entity):
         # Up-down movement
         if w:
             if self.check_collision(colliders, 0, window): return
-            self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)))
+            self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)), window)
         elif s:
             if self.check_collision(colliders, 1, window): return
-            self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)))
+            self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)), window)
 
         # Left-right movement
         if a:
             if self.check_collision(colliders, 2, window): return
-            self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y))
+            self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y), window)
         elif d:
             if self.check_collision(colliders, 3, window): return
-            self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y))
+            self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y), window)
             pass
