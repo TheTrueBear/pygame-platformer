@@ -5,6 +5,7 @@ from mods.objects.entity import Entity
 
 class Level:
     lines = []
+    spawn = Vector2(0,0)
 
     def __init__(self, path):
         level = open(path, "r")
@@ -44,12 +45,14 @@ class Level:
         tiles = []
         for line in range(len(self.lines)):
             for tile in range(len(self.lines[line])):
-                if self.lines[line][tile] != " ":
+                if self.lines[line][tile] != " " and self.lines[line][tile] != "0":
                     tile_sprite = Image(key[self.lines[line][tile]])
                     tile_sprite.transform_size(Vector2(50, 50))
 
-                    tile = Entity(tile_sprite, RectCollider(50, 50), None, Vector2(tile * 50, line * 50))
-                    tiles.append(tile)
+                    cur_tile = Entity(tile_sprite, RectCollider(50, 50), None, Vector2(tile * 50, line * 50))
+                    tiles.append(cur_tile)
+                if self.lines[line][tile] == "0":
+                    self.spawn = Vector2(tile * 50, line * 50)
 
         return tiles
 

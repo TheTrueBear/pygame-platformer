@@ -24,7 +24,7 @@ class Window :
 
     # Key
     k_events = []
-    keys = [False] * 400
+    keys = []
 
     # Framerates
     current_fps = 0
@@ -38,12 +38,26 @@ class Window :
     offset = vector.Vector2(0,0)
 
     # Clear the screen
-    def cls(self) -> None:
-        self.render(vector.Vector2(0, 0), self.bgi)
+    def cls(self, flags="col") -> None:
+        if flags == "img":
+            self.render(vector.Vector2(0, 0), self.bgi)
+        else:
+            pygame.draw.rect(self.screen, (self.bgc.r, self.bgc.g, self.bgc.b), (0,0, self.size.x,self.size.y))
         # pygame.draw.rect(self.screen, (self.bgc.r, self.bgc.g, self.bgc.b), (0, 0, self.size.x, self.size.y))
+
+    # Render at the middle
+    def render_mid(self, img):
+        img_x = img.raw.get_width()
+        img_y = img.raw.get_height()
+
+        xpos = (self.size.x / 2) - (img_x / 2)
+        ypos = (self.size.y / 2) - (img_y / 2)
+
+        self.screen.blit(img.raw, (xpos, ypos))
 
     # Render an image
     def render(self, pos: vector.Vector2, img) -> None:
+        if img.is_plr: self.render_mid(img)
         self.screen.blit(img.raw, (pos.x + self.offset.x, pos.y + self.offset.y))
 
     # Update the window
@@ -70,14 +84,7 @@ class Window :
         events = pygame.event.get()
         for event in events:
             # Input
-            if event.type == pygame.KEYDOWN:
-                if event.key < len(self.keys):
-                    print(event.key)
-                    self.keys[event.key] = True
-                else:
-                    print("\033[31mException: Index not defined\033[0m")
-            if event.type == pygame.KEYUP:
-                self.keys[event.key] = False
+            self.keys = pygame.key.get_pressed()
 
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -109,3 +116,6 @@ class Window :
 
         # Init
         pygame.init()
+
+        # Keys
+        self.keys = pygame.key.get_pressed()

@@ -20,6 +20,9 @@ class Image :
     old_variants = []
     path = ""
 
+    lock = False
+    is_plr = False
+
     # Resize the image
     def transform_size(self, new_size) -> None:
         self.old_variants.append(self.raw)
@@ -30,9 +33,11 @@ class Image :
         return self.old_variants
 
     # Initiate the class
-    def __init__(self, path:str) -> None:
+    def __init__(self, path:str, is_plr:bool=False, is_locked:bool=False) -> None:
         self.path = path
         self.raw = pygame.image.load(self.path)
+        self.lock = is_locked
+        self.is_plr=is_plr
 
     def __repr__(self):
         return self.raw

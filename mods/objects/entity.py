@@ -81,6 +81,7 @@ class Player(Entity):
         super().__init__(sprite, collide, hitbox, position)
 
         # Set the controls
+        self.ghost_pos=position
         self.controls = controls
         self.c_lock = c_lock
 
@@ -114,16 +115,47 @@ class Player(Entity):
         # Up-down movement
         if w:
             if self.check_collision(colliders, 0, window): return
+            """
+            if self.c_lock:
+                self.ghost_pos = Vector2(self.ghost_pos.x, self.ghost_pos.y + (self.controls.speed * window.delta))
+                return
+                """
             self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)), window)
+            if self.c_lock:
+                window.change_offset(self.position)
         elif s:
             if self.check_collision(colliders, 1, window): return
+            """
+            if self.c_lock:
+                self.ghost_pos = Vector2(self.ghost_pos.x, self.ghost_pos.y - (self.controls.speed * window.delta))
+                return
+            """
             self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)), window)
+            if self.c_lock:
+                window.change_offset(self.position)
 
         # Left-right movement
         if a:
             if self.check_collision(colliders, 2, window): return
+            """
+            if self.c_lock:
+                self.ghost_pos = Vector2(self.ghost_pos.x + (self.controls.speed * window.delta), self.ghost_pos.y)
+                return
+                """
             self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y), window)
+            if self.c_lock:
+                window.change_offset(self.position)
         elif d:
             if self.check_collision(colliders, 3, window): return
+            """
+            if self.c_lock:
+                self.ghost_pos = Vector2(self.ghost_pos.x - (self.controls.speed * window.delta), self.ghost_pos.y)
+                return
+            """
             self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y), window)
+            if self.c_lock:
+                window.change_offset(self.position)
             pass
+
+    def __repr__(self):
+        return "PLR"
