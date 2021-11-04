@@ -5,7 +5,7 @@ import pygame
 from mods.gfx.color import Color3
 
 #############################################
-# A basic text-to-texture renderer. You can
+# A basic text-to-texture renderer. Y   ou can
 # set font, text, size, and color.
 class Text:
     text = ""
@@ -14,6 +14,8 @@ class Text:
     raw = None
 
     color = None
+
+    is_plr = False
 
     def __init__(self, font, size, text, color:Color3=Color3(0,0,0)):
         self.size = size

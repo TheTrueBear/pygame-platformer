@@ -12,6 +12,9 @@ class RectCollider:
 
     position = None
 
+    trigger = False
+    triggered = False
+
     # Warp the collider
     def warp(self, new_pos:Vector2):
         # Tried this before
@@ -48,18 +51,18 @@ class RectCollider:
     # Get collision
     def is_colliding(self, collider, sender):
         if self == sender.collider: return False
-
-        if self.rect.colliderect(collider.rect):
-            print("TOP: %s\nBOTTOM: %s\nLEFT: %s\nRIGHT:%s" % (self.rect.top, self.rect.bottom, self.rect.left, self.rect.right))
-            print("TOP2: %s\nBOTTOM2: %s\nLEFT2: %s\nRIGHT2:%s" % (collider.rect.top, collider.rect.bottom, collider.rect.left, collider.rect.right))
+        if self.trigger and self.rect.colliderect(collider.rect):
+            self.trigger = True
+            return False
 
         return self.rect.colliderect(collider.rect)
 
     # Initiate the collider
-    def __init__(self, x_size:int, y_size:int, start_pos:Vector2=Vector2(0,0)):
+    def __init__(self, x_size:int, y_size:int, start_pos:Vector2=Vector2(0,0), trigger:bool=False) -> None:
         self.x_size = x_size
         self.y_size = y_size
         self.position = start_pos
+        self.trigger = trigger
 
         self.rect = pygame.Rect(start_pos.x, start_pos.y, x_size, y_size)
         colliders.append(self)

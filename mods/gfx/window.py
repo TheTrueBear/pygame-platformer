@@ -57,7 +57,7 @@ class Window :
 
     # Render an image
     def render(self, pos: vector.Vector2, img) -> None:
-        if img.is_plr: self.render_mid(img)
+        if img.is_plr: self.render_mid(img); return
         self.screen.blit(img.raw, (pos.x + self.offset.x, pos.y + self.offset.y))
 
     # Update the window
@@ -68,6 +68,15 @@ class Window :
             self.delta_to_frame = 0
             pygame.display.update()
             self.frame_time -= self.fps
+
+            events = pygame.event.get()
+            for event in events:
+                # Input
+                self.keys = pygame.key.get_pressed()
+
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
         # Clear screen
         self.cls()
@@ -81,21 +90,12 @@ class Window :
         # Set frame-rate
         self.frame_time += self.delta
 
-        events = pygame.event.get()
-        for event in events:
-            # Input
-            self.keys = pygame.key.get_pressed()
-
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
     # Input
     def is_key_held(self, key:int) -> bool:
         return self.keys[key]
 
     def change_offset(self, offset):
-        self.offset = offset
+        self.offset = vector.Vector2(-offset.x + (self.size.x / 2) - 16, -offset.y + (self.size.y / 2) - 16)
 
     def __init__(self, size : vector.Vector2, bgc : color.Color3 = color.Color3(255, 0, 255), name : str = "Default", icon:image.Image = image.Image("mods/gfx/defaults/default.png"), framerate:int=60) -> None:
         # Set attributes

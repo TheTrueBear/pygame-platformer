@@ -81,9 +81,12 @@ class Player(Entity):
         super().__init__(sprite, collide, hitbox, position)
 
         # Set the controls
-        self.ghost_pos=position
         self.controls = controls
         self.c_lock = c_lock
+
+        # If the camera is locked
+        if c_lock:
+            self.sprite.is_plr = True
 
     # Teleport the player
     def warp_to(self, position, window=None):
@@ -108,6 +111,7 @@ class Player(Entity):
 
     # Move the player. This is using the controls variable.
     def move(self, window):
+        # Fix the offset
         w, a, s, d = self.controls.return_controls(window)
 
         colliders = collider.colliders
@@ -120,7 +124,7 @@ class Player(Entity):
                 self.ghost_pos = Vector2(self.ghost_pos.x, self.ghost_pos.y + (self.controls.speed * window.delta))
                 return
                 """
-            self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)), window)
+            self.warp_to(Vector2(self.position.x, self.position.y - (self.controls.speed * window.delta)))
             if self.c_lock:
                 window.change_offset(self.position)
         elif s:
@@ -130,7 +134,7 @@ class Player(Entity):
                 self.ghost_pos = Vector2(self.ghost_pos.x, self.ghost_pos.y - (self.controls.speed * window.delta))
                 return
             """
-            self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)), window)
+            self.warp_to(Vector2(self.position.x, self.position.y + (self.controls.speed * window.delta)))
             if self.c_lock:
                 window.change_offset(self.position)
 
@@ -142,7 +146,7 @@ class Player(Entity):
                 self.ghost_pos = Vector2(self.ghost_pos.x + (self.controls.speed * window.delta), self.ghost_pos.y)
                 return
                 """
-            self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y), window)
+            self.warp_to(Vector2(self.position.x - (self.controls.speed * window.delta), self.position.y))
             if self.c_lock:
                 window.change_offset(self.position)
         elif d:
@@ -152,7 +156,7 @@ class Player(Entity):
                 self.ghost_pos = Vector2(self.ghost_pos.x - (self.controls.speed * window.delta), self.ghost_pos.y)
                 return
             """
-            self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y), window)
+            self.warp_to(Vector2(self.position.x + (self.controls.speed * window.delta), self.position.y))
             if self.c_lock:
                 window.change_offset(self.position)
             pass
